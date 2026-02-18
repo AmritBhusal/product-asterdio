@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Product, ProductsResponse, Category } from "@/types/product";
-import { getProducts, searchProducts, getProductsByCategory } from "@/api/products";
+import { getProducts, searchProducts, getProductsByCategory } from "@/services/productService";
 import { useDebounce } from "./useDebounce";
 
 interface UseProductsOptions {
