@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Luxe — Modern E-Commerce Storefront
+
+This is a project built as a high-performance e-commerce storefront. I used Next.js and TypeScript to keep it fast and type-safe, with Tailwind CSS handling the design. The goal was to build something that feels premium but stays simple under the hood.
 
 ## Getting Started
 
-First, run the development server:
+To get this running on your machine, just follow these steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1.  **Clone and Install**:
+    ```bash
+    git clone <repository-url>
+    cd asterdio-assignment
+    npm install
+    ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2.  **Environment Setup**:
+    Create a `.env.local` file in the root. You'll need these two variables:
+    ```env
+    BASE_URL=https://dummyjson.com
+    NEXT_PUBLIC_SITE_URL=http://localhost:3000
+    ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3.  **Run it**:
+    ```bash
+    npm run dev
+    ```
+    Head over to `http://localhost:3000` to see it in action.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## How the project is organized
 
-To learn more about Next.js, take a look at the following resources:
+I've tried to keep the folder structure as intuitive as possible:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+*   **`app/`**: All the routing and layouts. I've also included some API routes here to act as a proxy for client-side calls.
+*   **`services/`**: This is where all the API logic lives. It handles the communication with DummyJSON and switches between server and client calls automatically.
+*   **`hooks/`**: Custom hooks to keep the components clean. `useProducts` is the main one—it handles all the search, filtering, and pagination logic.
+*   **`context/`**: Used for global states like the Wishlist so you don't have to pass props through every single component.
+*   **`components/`**: Split into `shared` (headers/footers), `home` (homepage specific stuff), and `ui` (reusable base components).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Technical Decisions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+*   **Native Fetch over Axios**: I decided to stick with the native Fetch API. It's built into Next.js, supports great caching out of the box, and keeps the bundle size smaller.
+*   **URL-Synced States**: When you filter or search, the URL updates. This means you can refresh the page or share a link, and the exact same results will show up.
+*   **State Lifting**: Instead of putting everything in a global store (like Redux), I kept the logic local to the features that actually use it. It makes the code easier to follow.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## What I'd add next
+
+If I had more time to work on this, here are a few things I'd focus on:
+
+*   **Real Checkout**: Setting up a full flow with payment partners like **Esewa** and others.
+*   **User Accounts**: Adding authentication so people can save their addresses and see past orders.
+*   **Better Testing**: I'd like to add some unit tests for the core services and maybe some E2E tests for the "Add to Cart" flow.
+*   **Performance**: There's always room for more image optimization and better loading skeletons to make it feel even snappier on slow connections.
