@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { Heart, ShoppingCart, Eye } from "lucide-react";
+import { Heart, Eye } from "lucide-react";
 import { Product } from "@/types/product";
 import StarRating from "./StarRating";
 import { useWishlist } from "@/hooks/useWishlist";
@@ -25,7 +25,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             {/* Wishlist toggle */}
             <button
                 onClick={() => toggleWishlist(product)}
-                className="absolute right-3 top-3 z-10 rounded-full bg-white/90 p-2 shadow-sm backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-white"
+                className="absolute right-3 top-3 z-10 rounded-full bg-white/90 cursor-pointer p-2 shadow-sm backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-white"
                 aria-label={isWishlisted ? "Remove from favorites" : "Add to favorites"}
             >
                 <Heart
@@ -93,11 +93,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                     >
                         <Eye className="h-4 w-4" />
                         View
-                    </Link>
-                    <button className="flex flex-[1.5] cursor-pointer items-center justify-center gap-2 rounded-xl bg-stone-900 px-3 py-2.5 text-xs font-semibold text-white transition-all duration-200 hover:bg-emerald-700 active:scale-95">
-                        <ShoppingCart className="h-4 w-4" />
-                        Add to Cart
-                    </button>
+                    </Link>                    
                 </div>
             </div>
         </div>
