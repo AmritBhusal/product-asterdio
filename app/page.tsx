@@ -1,9 +1,18 @@
-import React from 'react'
+import { getProducts } from "@/services/productService";
+import { getCategories } from "@/services/categoryService";
+import HomeContent from "@/components/home/HomeContent";
 
-const Home = () => {
+export default async function Home() {
+  const [productsData, categories] = await Promise.all([
+    getProducts({ limit: 12 }),
+    getCategories(),
+  ]);
+
   return (
-    <div>Home</div>
-  )
+    <HomeContent
+      initialProducts={productsData.products}
+      initialTotal={productsData.total}
+      categories={categories}
+    />
+  );
 }
-
-export default Home
