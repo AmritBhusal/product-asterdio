@@ -1,5 +1,6 @@
 import { Product } from "@/types/product";
 import { BadgeCheck } from "lucide-react";
+import Link from "next/link";
 
 interface ProductSpecsProps {
     product: Product;
@@ -35,15 +36,22 @@ export default function ProductSpecs({ product }: ProductSpecsProps) {
                 </div>
             )}
 
-            {/* Barcode & QR */}
-            <div className="mt-8 rounded-xl bg-stone-50 p-4">
-                <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-semibold text-stone-400">Authenticity</span>
-                    <BadgeCheck className="h-4 w-4 text-emerald-500" />
+            {/* Authenticity Message & CTA */}
+            <div className="mt-8 rounded-xl bg-stone-50 p-5 border border-stone-100">
+                <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-bold uppercase tracking-wider text-stone-400">Authenticity</span>
+                    <BadgeCheck className="h-5 w-5 text-emerald-500" />
                 </div>
-                <p className="font-mono text-xs text-stone-600 mb-3">{product.meta.barcode}</p>
-                <div className="flex justify-center bg-white rounded-lg p-3">
-                    <img src={product.meta.qrCode} alt="QR" className="h-20 w-20 object-contain" />
+                <div className="space-y-4">
+                    <p className="text-xs text-stone-600 leading-relaxed">
+                        Every Asterdio product is crafted with precision. Check the authenticity of your product to ensure it's a genuine creation.
+                    </p>
+                    <Link
+                        href="/verification"
+                        className="flex items-center justify-center gap-2 w-full rounded-lg bg-white border border-stone-200 py-2.5 text-xs font-bold text-stone-900 shadow-sm transition-all hover:bg-stone-50 hover:border-stone-300"
+                    >
+                        Verify Your Product
+                    </Link>
                 </div>
             </div>
         </div>
