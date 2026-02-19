@@ -5,13 +5,15 @@ import { useState } from "react";
 import { Heart, ShoppingCart } from "lucide-react";
 import { Product } from "@/types/product";
 import StarRating from "./StarRating";
+import { useWishlist } from "@/hooks/useWishlist";
 
 interface ProductCardProps {
     product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-    const [isWishlisted, setIsWishlisted] = useState(false);
+    const { toggleWishlist, isInWishlist } = useWishlist();
+    const isWishlisted = isInWishlist(product.id);
     const [imageError, setImageError] = useState(false);
 
     const discountedPrice =
@@ -21,7 +23,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="group relative overflow-hidden rounded-2xl border border-stone-200/60 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-stone-200/50">
             {/* Wishlist toggle */}
             <button
-                onClick={() => setIsWishlisted(!isWishlisted)}
+                onClick={() => toggleWishlist(product)}
                 className="absolute right-3 top-3 z-10 rounded-full bg-white/90 p-2 shadow-sm backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-white"
                 aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
             >
