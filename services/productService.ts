@@ -1,7 +1,7 @@
 import { ProductsResponse } from "@/types/product";
 
 const BASE = typeof window === "undefined"
-    ? `${process.env.NEXT_PUBLIC_SITE_URL }`
+    ? `${process.env.NEXT_PUBLIC_SITE_URL}`
     : "";
 
 async function fetchJson<T>(url: string): Promise<T> {
@@ -67,4 +67,8 @@ export async function getProductsByCategory(
         order: params.order,
     });
     return fetchJson<ProductsResponse>(`${BASE}/api/products?${query}`);
+}
+
+export async function getProduct(id: string | number): Promise<any> {
+    return fetchJson<any>(`${BASE}/api/products/${id}`);
 }
