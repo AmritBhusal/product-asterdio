@@ -27,8 +27,8 @@ export default function ProductCard({ product }: ProductCardProps) {
             >
                 <Heart
                     className={`h-4 w-4 transition-colors ${isWishlisted
-                            ? "fill-rose-500 text-rose-500"
-                            : "text-stone-400 hover:text-rose-400"
+                        ? "fill-rose-500 text-rose-500"
+                        : "text-stone-400 hover:text-rose-400"
                         }`}
                 />
             </button>
@@ -41,15 +41,22 @@ export default function ProductCard({ product }: ProductCardProps) {
             )}
 
             {/* Product Image */}
-            <div className="relative aspect-square overflow-hidden bg-stone-100">
-                <Image
-                    src={imageError ? "/placeholder.svg" : product.thumbnail}
-                    alt={product.title}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    onError={() => setImageError(true)}
-                />
+            <div className="relative aspect-square overflow-hidden bg-stone-100 flex items-center justify-center">
+                {(!product.images?.[0] && !product.thumbnail) || imageError ? (
+                    <div className="flex flex-col items-center justify-center p-4 text-center">
+                        <span className="text-xs font-medium text-stone-400">Image not found</span>
+                    </div>
+                ) : (
+                    <Image
+                        src={product.images?.[0] || product.thumbnail}
+                        alt={product.title}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        quality={90}
+                        onError={() => setImageError(true)}
+                    />
+                )}
             </div>
 
             {/* Product Info */}
@@ -76,7 +83,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                     )}
                 </div>
 
-                <button className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-stone-900 px-4 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-emerald-700 active:scale-[0.98]">
+                <button className="mt-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-stone-900 px-4 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-emerald-700 active:scale-[0.98]">
                     <ShoppingCart className="h-4 w-4" />
                     Add to Cart
                 </button>

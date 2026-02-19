@@ -96,7 +96,8 @@ export function useProducts(options: UseProductsOptions = {}) {
             page === 1 &&
             !debouncedSearch &&
             !filters.category &&
-            options.initialProducts?.length;
+            options.initialProducts?.length &&
+            products === options.initialProducts;
 
         if (!isInitialLoad) {
             fetchProducts();
