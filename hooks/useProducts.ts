@@ -116,7 +116,12 @@ export function useProducts(options: UseProductsOptions = {}) {
         }));
     }, [searchParams, options.syncWithUrl]);
 
-    const fetchProducts = useCallback(async () => {
+    const fetchProducts = useCallback(async (isInitial: boolean = false) => {
+        // In syncWithUrl mode, the server component handles the initial load.
+        if (options.syncWithUrl && isInitial) {
+            return;
+        }
+
         setLoading(true);
         setError(null);
 
@@ -131,6 +136,8 @@ export function useProducts(options: UseProductsOptions = {}) {
                 order: filters.order,
             };
 
+            // Use useDebounce outside or pass the current search term
+            // Actually, we use filters.search for the UI and debouncedSearch for fetching
             if (debouncedSearch) {
                 result = await searchProducts(debouncedSearch, params);
             } else if (filters.category) {
@@ -156,7 +163,7 @@ export function useProducts(options: UseProductsOptions = {}) {
         } finally {
             setLoading(false);
         }
-    }, [debouncedSearch, filters.category, filters.sortBy, filters.order, filters.minPrice, filters.maxPrice, page]);
+    }, [debouncedSearch, filters.category, filters.sortBy, filters.order, filters.minPrice, filters.maxPrice, page, options.syncWithUrl]);
 
     // Initial load from props
     useEffect(() => {
@@ -168,11 +175,13 @@ export function useProducts(options: UseProductsOptions = {}) {
         }
     }, [options.initialProducts, options.initialTotal]);
 
-    // Fetch on filter/page change - only if syncWithUrl is false OR if we detect URL state changed
+    // Fetch on filter/page change
     useEffect(() => {
         // In syncWithUrl mode, the server component handles the initial load.
-        // We only need to fetch if filters actually changed.
+        // We only need to fetch if filters actually changed AFTER mount.
         if (!options.syncWithUrl) {
+            fetchProducts();
+        } else if (!isInitialMount.current) {
             fetchProducts();
         }
     }, [fetchProducts, options.syncWithUrl]);
