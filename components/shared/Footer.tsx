@@ -10,14 +10,14 @@ export default function Footer() {
                     <div className="space-y-4">
                         <Link
                             href="/"
-                            className="flex items-center gap-2 text-xl font-semibold tracking-tight text-stone-900"
+                            className="flex items-center gap-2"
                         >
-                            <ShoppingBag className="h-6 w-6 text-emerald-600" />
-                            <span>Luxe</span>
+                            <img src="/logo.svg" alt="Asterdio" className="h-8 w-auto" />
                         </Link>
                         <p className="text-sm leading-relaxed text-stone-500">
-                            Curated collection of premium products with a focus on quality,
-                            craftsmanship, and timeless design.
+                            Global Tech Partner for Digital Transformation & Software Innovation.
+                            Bespoke custom software development and staff augmentation solutions
+                            tailored to meet your business needs.
                         </p>
                     </div>
 
@@ -29,6 +29,7 @@ export default function Footer() {
                         <ul className="space-y-3">
                             {[
                                 { href: "/", label: "Home" },
+                                { href: "/favorites", label: "Favorites" },
                                 { href: "/contact", label: "Contact" },
                             ].map((link) => (
                                 <li key={link.href}>
@@ -51,15 +52,15 @@ export default function Footer() {
                         <ul className="space-y-3">
                             <li className="flex items-start gap-2 text-sm text-stone-500">
                                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
-                                <span>123 Commerce St, Fashion District, NY 10001</span>
+                                <span>Nº 29/24 Aster Suites UN Park Lane, Sankhamul Lalitpur-11, Bagmati</span>
                             </li>
                             <li className="flex items-center gap-2 text-sm text-stone-500">
                                 <Phone className="h-4 w-4 shrink-0 text-emerald-600" />
-                                <span>+1 (555) 123-4567</span>
+                                <span>+977-9801 038 837</span>
                             </li>
                             <li className="flex items-center gap-2 text-sm text-stone-500">
                                 <Mail className="h-4 w-4 shrink-0 text-emerald-600" />
-                                <span>hello@luxestore.com</span>
+                                <span>hello@asterdio.com</span>
                             </li>
                         </ul>
                     </div>
@@ -78,7 +79,7 @@ export default function Footer() {
                 </div>
 
                 <div className="mt-12 border-t border-stone-200 pt-8 text-center text-sm text-stone-400">
-                    © {new Date().getFullYear()} Luxe. All rights reserved.
+                    © {new Date().getFullYear()} Asterdio Inc. All rights reserved.
                 </div>
             </div>
         </footer>

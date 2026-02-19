@@ -3,23 +3,23 @@ import { Mail, MapPin, Phone, Clock } from "lucide-react";
 const contactInfo = [
     {
         icon: MapPin,
-        label: "Visit Us",
-        value: "123 Commerce St, Fashion District, NY 10001",
+        label: "Visit Us (NP)",
+        value: "Nº 29/24 Aster Suites UN Park Lane, Sankhamul Lalitpur-11, Bagmati",
+    },
+    {
+        icon: MapPin,
+        label: "Visit Us (US)",
+        value: "2020 N Academy Blvd, Ste 261, Colorado Springs, CO 80909, US",
     },
     {
         icon: Phone,
         label: "Call Us",
-        value: "+1 (555) 123-4567",
+        value: "+977-9801 038 837\n+1 (719) 330-3007",
     },
     {
         icon: Mail,
         label: "Email Us",
-        value: "hello@luxestore.com",
-    },
-    {
-        icon: Clock,
-        label: "Business Hours",
-        value: "Mon–Fri: 9am – 6pm\nSat: 10am – 4pm\nSun: Closed",
+        value: "hello@asterdio.com",
     },
 ];
 

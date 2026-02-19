@@ -89,10 +89,10 @@ export default function SearchAndFilters({
                         <SelectTrigger className="h-11 w-48 rounded-xl cursor-pointer border-stone-200 bg-white shadow-sm">
                             <SelectValue placeholder="All Categories" />
                         </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">All Categories</SelectItem>
+                        <SelectContent position="popper" sideOffset={4} className="max-h-80 w-[var(--radix-select-trigger-width)] overflow-y-auto rounded-xl border-stone-200 bg-white/95 backdrop-blur-sm shadow-xl">
+                            <SelectItem value="all" className="cursor-pointer">All Categories</SelectItem>
                             {categories.map((cat) => (
-                                <SelectItem key={cat.slug} value={cat.slug}>
+                                <SelectItem key={cat.slug} value={cat.slug} className="cursor-pointer">
                                     {cat.name}
                                 </SelectItem>
                             ))}

@@ -13,9 +13,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Luxe — Premium E-Commerce",
+  title: "Asterdio — Global Tech Partner for Digital Transformation & Software Innovation",
   description:
-    "Discover exceptional products curated for quality and craftsmanship. Browse our premium collection with fast shipping and easy returns.",
+    "Bespoke custom software development and staff augmentation solutions tailored to meet your business needs, driving efficiency and innovation.",
 };
 
 export default function RootLayout({

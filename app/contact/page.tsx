@@ -3,9 +3,9 @@ import ContactForm from "@/components/contact/ContactForm";
 import ContactInfo from "@/components/contact/ContactInfo";
 
 export const metadata: Metadata = {
-    title: "Contact — Luxe",
+    title: "Contact — Asterdio",
     description:
-        "Get in touch with the Luxe team. We're here to help with any questions about our premium product collection.",
+        "Get in touch with the Asterdio team. Global Tech Partner for Digital Transformation & Software Innovation.",
 };
 
 export default function ContactPage() {

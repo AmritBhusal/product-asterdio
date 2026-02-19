@@ -20,10 +20,9 @@ export default function Navbar() {
                 {/* Logo */}
                 <Link
                     href="/"
-                    className="flex items-center gap-2 text-xl font-semibold tracking-tight text-stone-900 transition-colors hover:text-emerald-700"
+                    className="flex items-center gap-2"
                 >
-                    <ShoppingBag className="h-6 w-6 text-emerald-600" />
-                    <span>Luxe</span>
+                    <img src="/logo.svg" alt="Asterdio" className="h-8 w-auto" />
                 </Link>
 
                 {/* Desktop nav */}
