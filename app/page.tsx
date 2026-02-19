@@ -1,4 +1,4 @@
-import { getProducts } from "@/services/productService";
+import { getProducts} from "@/services/productService";
 import { getCategories } from "@/services/categoryService";
 import HomeContent from "@/components/home/HomeContent";
 

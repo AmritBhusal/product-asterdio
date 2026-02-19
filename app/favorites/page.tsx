@@ -5,7 +5,7 @@ import ProductCard from "@/components/shared/ProductCard";
 import Link from "next/link";
 import { Heart, ArrowLeft } from "lucide-react";
 
-export default function WishlistPage() {
+export default function FavoritesPage() {
     const { wishlist } = useWishlist();
 
     return (
@@ -15,7 +15,7 @@ export default function WishlistPage() {
                 <div className="mb-10 flex items-center justify-between">
                     <div>
                         <h1 className="text-3xl font-bold tracking-tight text-stone-900">
-                            Your Wishlist
+                            Your Favorites
                         </h1>
                         <p className="mt-1 text-sm text-stone-500">
                             {wishlist.length} {wishlist.length === 1 ? "item" : "items"} saved
@@ -36,7 +36,7 @@ export default function WishlistPage() {
                             <Heart className="h-8 w-8 text-stone-300" />
                         </div>
                         <h2 className="text-xl font-semibold text-stone-900">
-                            Your wishlist is empty
+                            Your favorites is empty
                         </h2>
                         <p className="mt-2 text-stone-500">
                             Explore our collection and save items you love for later.

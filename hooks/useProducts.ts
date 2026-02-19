@@ -1,14 +1,14 @@
-"use client";
-
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Product, ProductsResponse, Category } from "@/types/product";
 import { getProducts, searchProducts, getProductsByCategory } from "@/services/productService";
 import { useDebounce } from "./useDebounce";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface UseProductsOptions {
     initialProducts?: Product[];
     initialTotal?: number;
     categories?: Category[];
+    syncWithUrl?: boolean;
 }
 
 interface Filters {
@@ -23,6 +23,10 @@ interface Filters {
 const PRODUCTS_PER_PAGE = 12;
 
 export function useProducts(options: UseProductsOptions = {}) {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const isInitialMount = useRef(true);
+
     const [products, setProducts] = useState<Product[]>(
         options.initialProducts || []
     );
@@ -31,17 +35,86 @@ export function useProducts(options: UseProductsOptions = {}) {
     );
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [page, setPage] = useState(1);
-    const [filters, setFilters] = useState<Filters>({
-        search: "",
-        category: "",
-        sortBy: "title",
-        order: "asc",
-        minPrice: 0,
-        maxPrice: 10000,
-    });
+
+    // Get initial state from URL or options
+    const getInitialPage = () => {
+        if (options.syncWithUrl) {
+            return Number(searchParams.get("page")) || 1;
+        }
+        return 1;
+    };
+
+    const getInitialFilters = (): Filters => {
+        if (options.syncWithUrl) {
+            return {
+                search: searchParams.get("search") || "",
+                category: searchParams.get("category") || "",
+                sortBy: searchParams.get("sort") || "title",
+                order: (searchParams.get("order") as "asc" | "desc") || "asc",
+                minPrice: Number(searchParams.get("minPrice")) || 0,
+                maxPrice: Number(searchParams.get("maxPrice")) || 2000,
+            };
+        }
+        return {
+            search: "",
+            category: "",
+            sortBy: "title",
+            order: "asc",
+            minPrice: 0,
+            maxPrice: 2000,
+        };
+    };
+
+    const [page, setPage] = useState(getInitialPage);
+    const [filters, setFilters] = useState<Filters>(getInitialFilters);
 
     const debouncedSearch = useDebounce(filters.search, 400);
+
+    // Update URL when filters or page change
+    useEffect(() => {
+        if (!options.syncWithUrl) return;
+
+        // Skip the very first run to avoid redundant push if URL is already correct
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+            return;
+        }
+
+        const params = new URLSearchParams();
+        if (debouncedSearch) params.set("search", debouncedSearch);
+        if (filters.category) params.set("category", filters.category);
+        if (filters.sortBy !== "title") params.set("sort", filters.sortBy);
+        if (filters.order !== "asc") params.set("order", filters.order);
+        if (filters.minPrice > 0) params.set("minPrice", filters.minPrice.toString());
+        if (filters.maxPrice < 2000) params.set("maxPrice", filters.maxPrice.toString());
+        if (page > 1) params.set("page", page.toString());
+
+        router.push(`/?${params.toString()}`, { scroll: false });
+    }, [debouncedSearch, filters.category, filters.sortBy, filters.order, filters.minPrice, filters.maxPrice, page, options.syncWithUrl, router]);
+
+    // Update local state when URL changes (e.g. back button)
+    useEffect(() => {
+        if (!options.syncWithUrl) return;
+
+        const urlPage = Number(searchParams.get("page")) || 1;
+        const urlSearch = searchParams.get("search") || "";
+        const urlCategory = searchParams.get("category") || "";
+        const urlSort = searchParams.get("sort") || "title";
+        const urlOrder = (searchParams.get("order") as "asc" | "desc") || "asc";
+        const urlMinPrice = Number(searchParams.get("minPrice")) || 0;
+        const urlMaxPrice = Number(searchParams.get("maxPrice")) || 2000;
+
+        setPage(urlPage);
+        setFilters((prev) => ({
+            ...prev,
+            search: urlSearch,
+            category: urlCategory,
+            sortBy: urlSort,
+            order: urlOrder,
+            minPrice: urlMinPrice,
+            maxPrice: urlMaxPrice,
+        }));
+    }, [searchParams, options.syncWithUrl]);
 
     const fetchProducts = useCallback(async () => {
         setLoading(true);
@@ -68,7 +141,7 @@ export function useProducts(options: UseProductsOptions = {}) {
 
             // Client-side price filter
             let filtered = result.products;
-            if (filters.minPrice > 0 || filters.maxPrice < 10000) {
+            if (filters.minPrice > 0 || filters.maxPrice < 2000) {
                 filtered = filtered.filter(
                     (p) => p.price >= filters.minPrice && p.price <= filters.maxPrice
                 );
@@ -85,24 +158,24 @@ export function useProducts(options: UseProductsOptions = {}) {
         }
     }, [debouncedSearch, filters.category, filters.sortBy, filters.order, filters.minPrice, filters.maxPrice, page]);
 
-    // Reset page when filters change
+    // Initial load from props
     useEffect(() => {
-        setPage(1);
-    }, [debouncedSearch, filters.category, filters.sortBy, filters.order, filters.minPrice, filters.maxPrice]);
+        if (options.initialProducts) {
+            setProducts(options.initialProducts);
+        }
+        if (options.initialTotal !== undefined) {
+            setTotalProducts(options.initialTotal);
+        }
+    }, [options.initialProducts, options.initialTotal]);
 
-    // Fetch on filter/page change (skip initial if we have SSR data)
+    // Fetch on filter/page change - only if syncWithUrl is false OR if we detect URL state changed
     useEffect(() => {
-        const isInitialLoad =
-            page === 1 &&
-            !debouncedSearch &&
-            !filters.category &&
-            options.initialProducts?.length &&
-            products === options.initialProducts;
-
-        if (!isInitialLoad) {
+        // In syncWithUrl mode, the server component handles the initial load.
+        // We only need to fetch if filters actually changed.
+        if (!options.syncWithUrl) {
             fetchProducts();
         }
-    }, [fetchProducts, page, debouncedSearch, filters.category, options.initialProducts?.length]);
+    }, [fetchProducts, options.syncWithUrl]);
 
     const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 

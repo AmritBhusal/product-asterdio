@@ -46,7 +46,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
         if (exists) return;
 
         setWishlist((prev) => [...prev, product]);
-        toast.success(`${product.title} added to wishlist`);
+        toast.success(`${product.title} added to favorites`);
     }, [wishlist]);
 
     const removeFromWishlist = useCallback((productId: number) => {
@@ -61,10 +61,10 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
         const exists = wishlist.some((p) => p.id === product.id);
         if (exists) {
             setWishlist((prev) => prev.filter((p) => p.id !== product.id));
-            toast.info(`${product.title} removed from wishlist`);
+            toast.info(`${product.title} removed from favorites`);
         } else {
             setWishlist((prev) => [...prev, product]);
-            toast.success(`${product.title} added to wishlist`);
+            toast.success(`${product.title} added to favorites`);
         }
     }, [wishlist]);
 

@@ -19,6 +19,7 @@ interface HomeContentProps {
     initialProducts: Product[];
     initialTotal: number;
     categories: Category[];
+    searchParams?: { [key: string]: string | string[] | undefined };
 }
 
 export default function HomeContent({
@@ -40,6 +41,7 @@ export default function HomeContent({
         initialProducts,
         initialTotal,
         categories,
+        syncWithUrl: true,
     });
 
     return (
@@ -65,7 +67,10 @@ export default function HomeContent({
                     <SearchAndFilters
                         categories={categories}
                         filters={filters}
-                        onFilterChange={setFilters}
+                        onFilterChange={(newFilters) => {
+                            setFilters(newFilters);
+                            setPage(1); // Reset page on filter change
+                        }}
                     />
                 </div>
 
@@ -93,7 +98,10 @@ export default function HomeContent({
                                         href="#products"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            if (page > 1) setPage(page - 1);
+                                            if (page > 1) {
+                                                setPage(page - 1);
+                                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                                            }
                                         }}
                                         className={page <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                                     />
@@ -116,6 +124,7 @@ export default function HomeContent({
                                                 onClick={(e) => {
                                                     e.preventDefault();
                                                     setPage(pageNum);
+                                                    window.scrollTo({ top: 0, behavior: 'smooth' });
                                                 }}
                                                 isActive={page === pageNum}
                                                 className="cursor-pointer"
@@ -130,7 +139,10 @@ export default function HomeContent({
                                         href="#products"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            if (page < totalPages) setPage(page + 1);
+                                            if (page < totalPages) {
+                                                setPage(page + 1);
+                                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                                            }
                                         }}
                                         className={page >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
                                     />
