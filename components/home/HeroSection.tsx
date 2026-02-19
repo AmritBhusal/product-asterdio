@@ -1,4 +1,4 @@
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function HeroSection() {
@@ -31,7 +31,7 @@ export default function HeroSection() {
                         >
                             Explore Collection
                             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </Link>                       
+                        </Link>
                     </div>
                 </div>
             </div>

@@ -1,8 +1,9 @@
-import { ProductsResponse } from "@/types/product";
+import { Product, ProductsResponse } from "@/types/product";
 
-const BASE = typeof window === "undefined"
-    ? `${process.env.NEXT_PUBLIC_SITE_URL}`
-    : "";
+const isServer = typeof window === "undefined";
+
+const BASE = isServer ? process.env.BASE_URL! : "";
+const API_PREFIX = isServer ? "/products" : "/api/products";
 
 async function fetchJson<T>(url: string): Promise<T> {
     const res = await fetch(url);
@@ -38,13 +39,25 @@ export async function getProducts(
         sortBy: params.sortBy,
         order: params.order,
     });
-    return fetchJson<ProductsResponse>(`${BASE}/api/products?${query}`);
+    return fetchJson<ProductsResponse>(`${BASE}${API_PREFIX}?${query}`);
 }
 
 export async function searchProducts(
     searchTerm: string,
     params: ProductParams = {}
 ): Promise<ProductsResponse> {
+    if (isServer) {
+        // Direct external API call
+        const query = buildQuery({
+            q: searchTerm,
+            limit: params.limit || 20,
+            skip: params.skip || 0,
+            sortBy: params.sortBy,
+            order: params.order,
+        });
+        return fetchJson<ProductsResponse>(`${BASE}/products/search?${query}`);
+    }
+    // Client-side: go through local API proxy
     const query = buildQuery({
         search: searchTerm,
         limit: params.limit || 20,
@@ -52,13 +65,22 @@ export async function searchProducts(
         sortBy: params.sortBy,
         order: params.order,
     });
-    return fetchJson<ProductsResponse>(`${BASE}/api/products?${query}`);
+    return fetchJson<ProductsResponse>(`/api/products?${query}`);
 }
 
 export async function getProductsByCategory(
     category: string,
     params: ProductParams = {}
 ): Promise<ProductsResponse> {
+    if (isServer) {
+        const query = buildQuery({
+            limit: params.limit || 20,
+            skip: params.skip || 0,
+            sortBy: params.sortBy,
+            order: params.order,
+        });
+        return fetchJson<ProductsResponse>(`${BASE}/products/category/${encodeURIComponent(category)}?${query}`);
+    }
     const query = buildQuery({
         category,
         limit: params.limit || 20,
@@ -66,9 +88,9 @@ export async function getProductsByCategory(
         sortBy: params.sortBy,
         order: params.order,
     });
-    return fetchJson<ProductsResponse>(`${BASE}/api/products?${query}`);
+    return fetchJson<ProductsResponse>(`/api/products?${query}`);
 }
 
-export async function getProduct(id: string | number): Promise<any> {
-    return fetchJson<any>(`${BASE}/api/products/${id}`);
+export async function getProduct(id: string | number): Promise<Product> {
+    return fetchJson<Product>(`${BASE}${API_PREFIX}/${id}`);
 }

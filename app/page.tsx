@@ -1,4 +1,5 @@
-import { getProducts} from "@/services/productService";
+import { Suspense } from "react";
+import { getProducts } from "@/services/productService";
 import { getCategories } from "@/services/categoryService";
 import HomeContent from "@/components/home/HomeContent";
 
@@ -9,10 +10,12 @@ export default async function Home() {
   ]);
 
   return (
-    <HomeContent
-      initialProducts={productsData.products}
-      initialTotal={productsData.total}
-      categories={categories}
-    />
+    <Suspense>
+      <HomeContent
+        initialProducts={productsData.products}
+        initialTotal={productsData.total}
+        categories={categories}
+      />
+    </Suspense>
   );
 }

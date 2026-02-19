@@ -1,49 +1,64 @@
 import { NextRequest, NextResponse } from "next/server";
-import axios from "axios";
+import { z } from "zod/v4";
 
 const API_BASE_URL = process.env.BASE_URL;
 
+const productsQuerySchema = z.object({
+    search: z.string().max(200).optional().default(""),
+    category: z.string().max(100).optional().default(""),
+    limit: z.coerce.number().int().min(1).max(100).optional().default(12),
+    skip: z.coerce.number().int().min(0).optional().default(0),
+    sortBy: z.enum(["title", "price", "rating", ""]).optional().default(""),
+    order: z.enum(["asc", "desc"]).optional().default("asc"),
+});
+
 export async function GET(request: NextRequest) {
     try {
-        const searchParams = request.nextUrl.searchParams;
-        const search = searchParams.get("search") || "";
-        const category = searchParams.get("category") || "";
-        const limit = searchParams.get("limit") || "12";
-        const skip = searchParams.get("skip") || "0";
-        const sortBy = searchParams.get("sortBy") || "";
-        const order = searchParams.get("order") || "asc";
+        const raw = Object.fromEntries(request.nextUrl.searchParams.entries());
+        const parsed = productsQuerySchema.safeParse(raw);
+
+        if (!parsed.success) {
+            return NextResponse.json(
+                { error: "Invalid query parameters" },
+                { status: 400 }
+            );
+        }
+
+        const { search, category, limit, skip, sortBy, order } = parsed.data;
 
         let apiUrl: string;
 
         if (search) {
-            // Search products
             apiUrl = `${API_BASE_URL}/products/search?q=${encodeURIComponent(search)}&limit=${limit}&skip=${skip}`;
         } else if (category) {
-            // Filter by category
             apiUrl = `${API_BASE_URL}/products/category/${encodeURIComponent(category)}?limit=${limit}&skip=${skip}`;
         } else {
-            // Get all products
             apiUrl = `${API_BASE_URL}/products?limit=${limit}&skip=${skip}`;
         }
 
-        // Append sort params if provided
         if (sortBy) {
             apiUrl += `&sortBy=${sortBy}&order=${order}`;
         }
 
-        const response = await axios.get(apiUrl, {
-            headers: {
-                "Content-Type": "application/json",
-            },
+        const response = await fetch(apiUrl, {
+            headers: { Accept: "application/json" },
         });
 
-        return NextResponse.json(response.data);
-    } catch (error: unknown) {
-        const axiosError = error as { response?: { data?: unknown; status?: number }; message?: string };
-        console.error("API Error:", axiosError.response?.data || axiosError.message);
+        if (!response.ok) {
+            console.error("Upstream API error:", response.status, response.statusText);
+            return NextResponse.json(
+                { error: "Failed to fetch products" },
+                { status: 502 }
+            );
+        }
+
+        const data = await response.json();
+        return NextResponse.json(data);
+    } catch (error) {
+        console.error("API Error:", error instanceof Error ? error.message : error);
         return NextResponse.json(
-            { error: "Failed to fetch products", details: axiosError.response?.data },
-            { status: axiosError.response?.status || 500 }
+            { error: "Failed to fetch products" },
+            { status: 500 }
         );
     }
 }

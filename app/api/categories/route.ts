@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import axios from "axios";
 
 const API_BASE_URL = process.env.BASE_URL;
 
@@ -7,19 +6,25 @@ export async function GET() {
     try {
         const apiUrl = `${API_BASE_URL}/products/categories`;
 
-        const response = await axios.get(apiUrl, {
-            headers: {
-                "Content-Type": "application/json",
-            },
+        const response = await fetch(apiUrl, {
+            headers: { Accept: "application/json" },
         });
 
-        return NextResponse.json(response.data);
-    } catch (error: unknown) {
-        const axiosError = error as { response?: { data?: unknown; status?: number }; message?: string };
-        console.error("API Error:", axiosError.response?.data || axiosError.message);
+        if (!response.ok) {
+            console.error("Upstream API error:", response.status, response.statusText);
+            return NextResponse.json(
+                { error: "Failed to fetch categories" },
+                { status: 502 }
+            );
+        }
+
+        const data = await response.json();
+        return NextResponse.json(data);
+    } catch (error) {
+        console.error("API Error:", error instanceof Error ? error.message : error);
         return NextResponse.json(
-            { error: "Failed to fetch categories", details: axiosError.response?.data },
-            { status: axiosError.response?.status || 500 }
+            { error: "Failed to fetch categories" },
+            { status: 500 }
         );
     }
 }

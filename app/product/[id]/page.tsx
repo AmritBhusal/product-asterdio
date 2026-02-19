@@ -8,6 +8,8 @@ import ProductInfo from "@/components/product/ProductInfo";
 import ProductSpecs from "@/components/product/ProductSpecs";
 import ProductReviews from "@/components/product/ProductReviews";
 
+export { generateMetadata } from "./metadata";
+
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
