@@ -32,11 +32,21 @@ To get this running on your machine, just follow these steps:
 
 I've tried to keep the folder structure as intuitive as possible:
 
-*   **`app/`**: All the routing and layouts. I've also included some API routes here to act as a proxy for client-side calls.
-*   **`services/`**: This is where all the API logic lives. It handles the communication with DummyJSON and switches between server and client calls automatically.
-*   **`hooks/`**: Custom hooks to keep the components clean. `useProducts` is the main one—it handles all the search, filtering, and pagination logic.
-*   **`context/`**: Used for global states like the Wishlist so you don't have to pass props through every single component.
-*   **`components/`**: Split into `shared` (headers/footers), `home` (homepage specific stuff), and `ui` (reusable base components).
+*   **`app/`**: All the routing and layouts. Includes dynamic routes for product details and the new **Product Verification** system.
+*   **`services/`**: API logic layer. Handles communication with DummyJSON and manages cross-environment (server/client) fetch logic.
+*   **`hooks/`**: Custom hooks for business logic. `useProducts` handles search, filtering, and pagination.
+*   **`context/`**: Global state management (e.g., Favorites) using React Context API.
+*   **`components/`**: Modular component architecture split into `shared`, `home`, `product`, and `ui` for maximum reusability.
+
+---
+
+## Product Verification System
+
+I implemented a robust product authenticity verification feature to enhance user trust:
+
+*   **Static Guide**: A dedicated `/verification` page explains how users can verify products.
+*   **Dynamic Verification**: A custom route `/product/verify/[id]/[sku]` that cross-references scanned product data with our catalog.
+*   **Aesthetic Integration**: Highlighted Navbar links and integrated CTAs on product detail pages to encourage usage.
 
 ---
 
@@ -52,7 +62,10 @@ I've tried to keep the folder structure as intuitive as possible:
 
 If I had more time to work on this, here are a few things I'd focus on:
 
-*   **Real Checkout**: Setting up a full flow with payment partners like **Esewa** and others.
-*   **User Accounts**: Adding authentication so people can save their addresses and see past orders.
-*   **Better Testing**: I'd like to add some unit tests for the core services and maybe some E2E tests for the "Add to Cart" flow.
-*   **Performance**: There's always room for more image optimization and better loading skeletons to make it feel even snappier on slow connections.
+*   **Real Checkout**: Setting up a full payment flow with partners like **Esewa** and Stripe.
+*   **User Accounts**: Adding authentication so people can save their addresses, see past orders, and track verified products.
+*   **Next-Gen Verification**: 
+    *   **Blockchain Integration**: Using a decentralized ledger (NFTs) to store unique product identities.
+    *   **Encrypted QR Codes**: Transitioning to dynamic, single-use QR codes to prevent physical cloning of codes.
+    *   **Physical Security AI**: Enabling smartphone cameras to recognize unique product textures or holographic security strips.
+*   **Better Testing**: Adding Playwright for E2E testing of the scan-to-verify flow and Vitest for service-layer unit tests.

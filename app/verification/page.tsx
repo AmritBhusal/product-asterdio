@@ -51,13 +51,9 @@ export default function VerificationPage() {
                                 We've prepared a dummy product for you to test our verification system. Scan the QR code or click the button below to see the process in action.
                             </p>
                             <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-4">
-                                <Link
-                                    href="/product/verify/10/FRA-GUC-GUC-010"
-                                    className="group inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all"
-                                >
-                                    Verify Dummy Product
-                                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                                </Link>
+                                <div className="bg-primary/20 text-primary border border-primary/30 px-6 py-2 rounded-full text-sm font-bold uppercase tracking-widest animate-pulse">
+                                    Scan and Try
+                                </div>
                             </div>
                         </div>
 

@@ -37,20 +37,20 @@ export default function ProductSpecs({ product }: ProductSpecsProps) {
             )}
 
             {/* Authenticity Message & CTA */}
-            <div className="mt-8 rounded-xl bg-stone-50 p-5 border border-stone-100">
+            <div className="mt-8 rounded-xl bg-green-200 p-5 border border-stone-100">
                 <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs font-bold uppercase tracking-wider text-stone-400">Authenticity</span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-gray-800">Authenticity</span>
                     <BadgeCheck className="h-5 w-5 text-emerald-500" />
                 </div>
                 <div className="space-y-4">
                     <p className="text-xs text-stone-600 leading-relaxed">
-                        Every Asterdio product is crafted with precision. Check the authenticity of your product to ensure it's a genuine creation.
+                        Asterdio focuses on shipping the genuine products. You can verify our product authenticity.
                     </p>
                     <Link
                         href="/verification"
                         className="flex items-center justify-center gap-2 w-full rounded-lg bg-white border border-stone-200 py-2.5 text-xs font-bold text-stone-900 shadow-sm transition-all hover:bg-stone-50 hover:border-stone-300"
                     >
-                        Verify Your Product
+                       Learn How To
                     </Link>
                 </div>
             </div>
