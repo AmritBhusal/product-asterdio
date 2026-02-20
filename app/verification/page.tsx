@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { CheckCircle, ShieldCheck, QrCode, ArrowRight } from "lucide-react";
 
 export default function VerificationPage() {
@@ -59,9 +60,11 @@ export default function VerificationPage() {
 
                         <div className="bg-white p-6 rounded-2xl shrink-0 shadow-2xl shadow-primary/20">
                             <div className="w-48 h-48 bg-stone-100 rounded-lg flex items-center justify-center p-4">
-                                <img
+                                <Image
                                     src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://product-asterdio.vercel.app/product/verify/10/FRA-GUC-GUC-010"
                                     alt="Verification QR Code"
+                                    width={200}
+                                    height={200}
                                     className="w-full h-full object-contain"
                                 />
                             </div>
