@@ -64,8 +64,4 @@ If I had more time to work on this, here are a few things I'd focus on:
 
 *   **Real Checkout**: Setting up a full payment flow with partners like **Esewa** and Stripe.
 *   **User Accounts**: Adding authentication so people can save their addresses, see past orders, and track verified products.
-*   **Next-Gen Verification**: 
-    *   **Blockchain Integration**: Using a decentralized ledger (NFTs) to store unique product identities.
-    *   **Encrypted QR Codes**: Transitioning to dynamic, single-use QR codes to prevent physical cloning of codes.
-    *   **Physical Security AI**: Enabling smartphone cameras to recognize unique product textures or holographic security strips.
 *   **Better Testing**: Adding Playwright for E2E testing of the scan-to-verify flow and Vitest for service-layer unit tests.
